@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="layout">
+    <aside class="sidebar">
+        <h3 class="sidebar-title">Employee Panel</h3>
+        <nav class="sidebar-nav">
+            <a href="{% url 'employee_dashboard' %}" class="sidebar-link">Dashboard</a>
+            <a href="{% url 'employee_work' %}" class="sidebar-link active">My Work</a>
+            <a href="{% url 'notice_request' %}" class="sidebar-link">Notice Request</a>
+            <a href="{% url 'employee_attendance' %}" class="sidebar-link">My Attendance</a>
+        </nav>
+    </aside>
+
+    <section class="content">
+        <div class="card">
+            <h3 class="card-title">My Work</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Assigned</th>
+                            <th>Due</th>
+                            <th>Status</th>
+                            <th>Update</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in tasks %}
+                        <tr>
+                            <td>{{ t.title }}</td>
+                            <td>{{ t.description }}</td>
+                            <td>{{ t.assign_date|date:"Y-m-d H:i" }}</td>
+                            <td>{{ t.due_date }}</td>
+                            <td>{{ t.get_status_display }}</td>
+                            <td>
+                                <form method="post" style="display:flex; gap:6px; align-items:center;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="task_id" value="{{ t.id }}">
+                                    <select name="status" style="min-width:120px;">
+                                        {% for value,label in status_choices %}
+                                            <option value="{{ value }}" {% if t.status == value %}selected{% endif %}>
+                                                {{ label }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                    <button type="submit" class="btn btn-small btn-primary">
+                                        Save
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="6">No work assigned</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+         
+        </div>
+    </section>
+</div>
+{% endblock %}

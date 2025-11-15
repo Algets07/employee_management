@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="layout">
+    <aside class="sidebar">
+        <h3 class="sidebar-title">Employee Panel</h3>
+        <nav class="sidebar-nav">
+            <a href="{% url 'employee_dashboard' %}" class="sidebar-link">Dashboard</a>
+            <a href="{% url 'employee_work' %}" class="sidebar-link">My Work</a>
+            <a href="{% url 'notice_request' %}" class="sidebar-link active">Notice Request</a>
+            <a href="{% url 'employee_attendance' %}" class="sidebar-link">My Attendance</a>
+        </nav>
+    </aside>
+
+    <section class="content">
+
+        <div class="card">
+                <!-- Form column -->
+                <div>
+                    <form method="post">
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                            <div class="msg-area">
+                                {% for err in form.non_field_errors %}
+                                    <p class="msg">{{ err }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <div class="form-group">
+                            <label>{{ form.subject.label }}</label>
+                            {{ form.subject }}
+                            {% if form.subject.errors %}
+                                <div class="field-error">{{ form.subject.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{ form.message.label }}</label>
+                            {{ form.message }}
+                            {% if form.message.errors %}
+                                <div class="field-error">{{ form.message.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div style="margin-top:10px; display:flex; justify-content:flex-end;">
+                            <button type="submit" class="btn btn-primary">
+                                Submit Request
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="layout">
+    <aside class="sidebar">
+        <h3 class="sidebar-title">Admin Panel</h3>
+        <nav class="sidebar-nav">
+            <a href="{% url 'admin_dashboard' %}" class="sidebar-link">Dashboard</a>
+            <a href="{% url 'add_employee' %}" class="sidebar-link active">Add Employee</a>
+            <a href="{% url 'assign_work' %}" class="sidebar-link">Assign Work</a>
+            <a href="{% url 'notice_list' %}" class="sidebar-link">Notice Requests</a>
+            <a href="{% url 'attendance_view' %}" class="sidebar-link">Attendance</a>
+        </nav>
+    </aside>
+
+    <section class="content">
+
+        <!-- Main form card -->
+        <div class="card">
+            <form method="post">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="msg-area">
+                        {% for err in form.non_field_errors %}
+                            <p class="msg">{{ err }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px;">
+                    <!-- Account Info -->
+                    <div>
+                        <h4 style="font-size: 14px; margin-bottom: 8px; opacity: .9;">Account Info</h4>
+
+                        <div class="form-group">
+                            <label>{{ form.username.label }}</label>
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                                <div class="field-error">{{ form.username.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{ form.password.label }}</label>
+                            {{ form.password }}
+                            {% if form.password.errors %}
+                                <div class="field-error">{{ form.password.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{ form.first_name.label }}</label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}
+                                <div class="field-error">{{ form.first_name.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{ form.last_name.label }}</label>
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}
+                                <div class="field-error">{{ form.last_name.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{ form.email.label }}</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="field-error">{{ form.email.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Job Info -->
+                    <div>
+                        <h4 style="font-size: 14px; margin-bottom: 8px; opacity: .9;">Job Info</h4>
+
+                        <div class="form-group">
+                            <label>{{ form.employee_id.label }}</label>
+                            {{ form.employee_id }}
+                            {% if form.employee_id.errors %}
+                                <div class="field-error">{{ form.employee_id.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{ form.department.label }}</label>
+                            {{ form.department }}
+                            {% if form.department.errors %}
+                                <div class="field-error">{{ form.department.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{ form.position.label }}</label>
+                            {{ form.position }}
+                            {% if form.position.errors %}
+                                <div class="field-error">{{ form.position.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{ form.join_date.label }}</label>
+                            {{ form.join_date }}
+                            {% if form.join_date.errors %}
+                                <div class="field-error">{{ form.join_date.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{ form.phone.label }}</label>
+                            {{ form.phone }}
+                            {% if form.phone.errors %}
+                                <div class="field-error">{{ form.phone.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
+                    <button type="submit" class="btn btn-primary">
+                        Create Employee
+                    </button>
+                </div>
+            </form>
+
+            {% if messages %}
+                <div class="msg-area" style="margin-top: 10px;">
+                    {% for message in messages %}
+                        <p class="msg">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="layout">
+    <aside class="sidebar">
+        <h3 class="sidebar-title">Admin Panel</h3>
+        <nav class="sidebar-nav">
+            <a href="{% url 'admin_dashboard' %}" class="sidebar-link">Dashboard</a>
+            <a href="{% url 'add_employee' %}" class="sidebar-link">Add Employee</a>
+            <a href="{% url 'assign_work' %}" class="sidebar-link">Assign Work</a>
+            <a href="{% url 'notice_list' %}" class="sidebar-link active">Notice Requests</a>
+            <a href="{% url 'attendance_view' %}" class="sidebar-link">Attendance</a>
+        </nav>
+    </aside>
+
+    <section class="content">
+        <div class="card">
+            <h3 class="card-title">Notice Requests</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Subject</th>
+                            <th>Message</th>
+                            <th>Created</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for n in notices %}
+                        <tr>
+                            <td>{{ n.employee.user.get_full_name|default:n.employee.user.username }}</td>
+                            <td>{{ n.subject }}</td>
+                            <td>{{ n.message|truncatewords:12 }}</td>
+                            <td>{{ n.created_at|date:"Y-m-d H:i" }}</td>
+                            <td>{{ n.get_status_display }}</td>
+                            <td>
+                                {% if n.status == 'PENDING' %}
+                                    <a href="{% url 'approve_notice' n.pk %}" class="btn btn-small btn-primary">Approve</a>
+                                    <a href="{% url 'reject_notice' n.pk %}" class="btn btn-small btn-outline">Reject</a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="6">No notices</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

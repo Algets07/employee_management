@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee11 - Management System</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="app-bg">
+    <header class="top-nav">
+        <div class="logo">
+            <a href="{% url 'home' %}" style="text-decoration:none;">
+                <span class="logo-main">Employee</span><span class="logo-highlight">11</span>
+            </a>
+        </div>
+        <div class="top-nav-right">
+            {% if request.user.is_authenticated %}
+                <span class="user-label">Hi, {{ request.user.username }}</span>
+
+                {# If admin, show Admin Dashboard button #}
+                {% if request.user.is_staff %}
+                    <a href="{% url 'admin_dashboard' %}" class="btn btn-primary">
+                        Admin Dashboard
+                    </a>
+
+                {# If employee, show Employee Dashboard button #}
+                {% else %}
+                    <a href="{% url 'employee_dashboard' %}" class="btn btn-primary">
+                        Employee Dashboard
+                    </a>
+                {% endif %}
+
+                <a href="{% url 'logout' %}" class="btn btn-outline">Logout</a>
+            {% else %}
+                {# Not logged in: show separate buttons #}
+                <a href="{% url 'admin_login' %}" class="btn btn-outline">
+                    Admin Login
+                </a>
+                <a href="{% url 'employee_login' %}" class="btn btn-primary">
+                    Employee Login
+                </a>
+            {% endif %}
+        </div>
+    </header>
+
+    <main class="page-container">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

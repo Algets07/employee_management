@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="layout">
+    <aside class="sidebar">
+        <h3 class="sidebar-title">Employee Panel</h3>
+        <nav class="sidebar-nav">
+            <a href="{% url 'employee_dashboard' %}" class="sidebar-link">Dashboard</a>
+            <a href="{% url 'employee_work' %}" class="sidebar-link">My Work</a>
+            <a href="{% url 'notice_request' %}" class="sidebar-link">Notice Request</a>
+            <a href="{% url 'employee_attendance' %}" class="sidebar-link active">My Attendance</a>
+        </nav>
+    </aside>
+
+    <section class="content">
+        <div class="card">
+            <h3 class="card-title">My Attendance</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Remark</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in records %}
+                        <tr>
+                            <td>{{ r.date }}</td>
+                            <td>{{ r.get_status_display }}</td>
+                            <td>{{ r.remark }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="3">No records</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

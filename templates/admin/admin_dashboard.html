@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="layout">
+    <aside class="sidebar">
+        <h3 class="sidebar-title">Admin Panel</h3>
+        <nav class="sidebar-nav">
+            <a href="{% url 'admin_dashboard' %}" class="sidebar-link active">Dashboard</a>
+            <a href="{% url 'add_employee' %}" class="sidebar-link">Add Employee</a>
+            <a href="{% url 'assign_work' %}" class="sidebar-link">Assign Work</a>
+            <a href="{% url 'notice_list' %}" class="sidebar-link">Notice Requests</a>
+            <a href="{% url 'attendance_view' %}" class="sidebar-link">Attendance</a>
+        </nav>
+    </aside>
+
+    <section class="content">
+        <div class="grid-3">
+            <div class="card stat-card">
+                <p class="stat-label">Employees</p>
+                <p class="stat-value">{{ total_employees }}</p>
+            </div>
+            <div class="card stat-card">
+                <p class="stat-label">Total Tasks</p>
+                <p class="stat-value">{{ total_tasks }}</p>
+            </div>
+            <div class="card stat-card">
+                <p class="stat-label">Pending Notices</p>
+                <p class="stat-value">{{ pending_notices }}</p>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="card">
+                <h3 class="card-title">Employees</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Department</th>
+                                <th>Position</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for emp in employees %}
+                            <tr>
+                                <td>{{ emp.employee_id }}</td>
+                                <td>{{ emp.user.get_full_name|default:emp.user.username }}</td>
+                                <td>{{ emp.department }}</td>
+                                <td>{{ emp.position }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="4">No employees yet</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Recent Work</h3>
+                <div class="table-wrapper small-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Employee</th>
+                                <th>Due</th>
+                                <th>Status</th>
+                                <th>Edit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for task in recent_assignments %}
+                            <tr>
+                                <td>{{ task.title }}</td>
+                                <td>{{ task.tasker.user.get_full_name|default:task.tasker.user.username }}</td>
+                                <td>{{ task.due_date }}</td>
+                                <td>{{ task.get_status_display }}</td>
+                                <td>
+                                    <a href="{% url 'edit_work' task.pk %}" class="btn btn-small btn-outline">Edit</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="4">No work assigned yet</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title">Recent Notices</h3>
+            <div class="table-wrapper small-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Subject</th>
+                            <th>Created</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for n in recent_notices %}
+                        <tr>
+                            <td>{{ n.employee.user.get_full_name|default:n.employee.user.username }}</td>
+                            <td>{{ n.subject }}</td>
+                            <td>{{ n.created_at|date:"Y-m-d H:i" }}</td>
+                            <td>{{ n.get_status_display }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="4">No notices yet</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    </section>
+</div>
+{% endblock %}
